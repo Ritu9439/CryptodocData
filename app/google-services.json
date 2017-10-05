@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1072365847800",
+    "firebase_url": "https://crypto-60aa8.firebaseio.com",
+    "project_id": "crypto-60aa8",
+    "storage_bucket": "crypto-60aa8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072365847800:android:e512a4b8d0f70735",
+        "android_client_info": {
+          "package_name": "stock.cryptodoc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1072365847800-p1uci4tcj9d9j4lbt846br8d4v20b4l4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "stock.cryptodoc",
+            "certificate_hash": "96c2c4b7d680fd000e744c5acc2db09439af7ae2"
+          }
+        },
+        {
+          "client_id": "1072365847800-l9qn906luv1oetrqm5rdguvgfu1l079t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8diJ9iAoEyWdlZx7y0fXNxhyFwXFWDgo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1072365847800-l9qn906luv1oetrqm5rdguvgfu1l079t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

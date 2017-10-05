@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/nav_indian"
+        android:icon="@mipmap/ic_rate"
+        android:title="Indian" />
+    <item
+        android:icon="@mipmap/ic_rate"
+
+        android:id="@+id/nav_foreign"
+        android:title="Foreign" />
+
+
+    <item
+        android:icon="@mipmap/ic_rate"
+
+        android:id="@+id/nav_news"
+        android:title="News" />
+
+
+</menu>
