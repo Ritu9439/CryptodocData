@@ -30,6 +30,8 @@
         <activity
             android:name=".ui.activity.DetailedActivity"
             android:label=""
+            android:noHistory="true"
+
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.NewsActivity"
@@ -43,11 +45,13 @@
         <activity
             android:name=".ui.activity.GraphActivity"
             android:label=""
+
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.activity.LoginActivity" />
         <activity android:name=".ui.activity.IndianGraphActivity"
             android:label=""
+
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" ></activity>
     </application>

@@ -132,12 +132,7 @@ TextView txt_logout;
         close= (TextView) findViewById(R.id.close);
         date= (TextView) findViewById(R.id.date);
         market=getIntent().getStringExtra("market");
-        if (sessionManagement.isLoggedIn()){
-            HashMap<String,String> data=sessionManagement.getUserDetails();
-            email=data.get(SessionManagement.KEY_EMAIL);
-            photo=data.get(SessionManagement.KEY_PHOTOURI);
-            getComments(market,coin);
-        }
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -149,6 +144,14 @@ TextView txt_logout;
                 .build();
 
         mAuth = FirebaseAuth.getInstance();
+        if (sessionManagement.isLoggedIn()){
+            HashMap<String,String> data=sessionManagement.getUserDetails();
+            email=data.get(SessionManagement.KEY_EMAIL);
+            photo=data.get(SessionManagement.KEY_PHOTOURI);
+
+            Toast.makeText(this, ""+email, Toast.LENGTH_SHORT).show();
+            getComments(market,coin);
+        }
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,6 +166,7 @@ TextView txt_logout;
                     @Override
                     public void success(retrofit.client.Response response, retrofit.client.Response response2) {
                         Toast.makeText(IndianGraphActivity.this, "Posted", Toast.LENGTH_SHORT).show();
+
                         getComments(market,coin);
                     }
 
@@ -219,6 +223,33 @@ TextView txt_logout;
                 }
             }
         });
+        if(market != null && !market.isEmpty()) {
+            if (market.equalsIgnoreCase("LocalBitcoins")) {
+                if (coin.equalsIgnoreCase("BTC")) {
+                    getChart("BTC", "INR", "60", "LocalBitcoins");
+                    timeseries_hour.setChecked(true);
+
+                }
+            }
+
+            if (market.equalsIgnoreCase("Unocoin")) {
+                if (coin.equalsIgnoreCase("BTC")) {
+                    getChart("BTC", "INR", "60", "Unocoin");
+                    timeseries_hour.setChecked(true);
+
+                }
+
+            }
+
+            if (market.equalsIgnoreCase("EthexIndia")) {
+                if (coin.equalsIgnoreCase("BTC")) {
+                    getChartETH("BTC", "INR", "60", "ETHexIndia");
+                    timeseries_hour.setChecked(true);
+
+                }
+
+            }
+        }
         timeseries.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -308,14 +339,14 @@ TextView txt_logout;
                                 }
                             if (market.equalsIgnoreCase("Unocoin")) {
 
-                                getBTCchartMonth("BTC", "INR", "60", "Unocoin");
+                                getChart("BTC", "INR", "60", "Unocoin");
 
 
 
                             }
                             if (market.equalsIgnoreCase("EthexIndia")) {
 
-                                getBTCchartMonth("ETH", "INR", "60", "EthexIndia");
+                                getChartETH("ETH", "INR", "60", "EthexIndia");
 
 
 
@@ -395,6 +426,51 @@ TextView txt_logout;
 
 
     }
+
+    private void getChartETH(String btc, String usd, String s, String bitfinex) {
+        ApiInterface apiInterface= ApiClient.getClient().create(ApiInterface.class);
+        if (al!=null) {
+            al.clear();
+        }
+        if (arrayList!=null) {
+            arrayList.clear();
+        }
+        Call<Example> responseBodyCall=apiInterface.getChartsETH();
+        responseBodyCall.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Call<Example> call, Response<Example> response) {
+                List<Datum> data=response.body().getData();
+                for (int i=0;i<data.size();i++) {
+                    Datum d = data.get(i);
+
+                    al.add(""+getDateandTime(d.getTime()));
+
+                    Log.d("sdfs", "" + d.getClose());
+                }
+
+                for (int i=0;i<data.size();i++) {
+                    Datum d = data.get(i);
+                    CandleEntry entry=new CandleEntry(i,Float.parseFloat(String.valueOf(d.getHigh())),Float.parseFloat(String.valueOf(d.getLow())),Float.parseFloat(String.valueOf(d.getOpen())),Float.parseFloat(String.valueOf(d.getClose())));
+                    arrayList.add(entry);
+                    Log.d("sdfs", "" + d.getClose());
+                }
+                CandleDataSet dataset = new CandleDataSet(arrayList,"");
+                dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+                CandleData datas = new CandleData(al, dataset);
+                dataset.setValueTextColor(Color.TRANSPARENT);
+                web.setData(datas);
+                web.invalidate();
+
+            }
+
+            @Override
+            public void onFailure(Call<Example> call, Throwable t) {
+            }
+        });
+
+
+    }
+
     private void signOut() {
 
         // Firebase sign out
@@ -426,11 +502,14 @@ TextView txt_logout;
     protected void onResume() {
         super.onResume();
         if (sessionManagement.isLoggedIn()){
+            market=getIntent().getStringExtra("market");
+
             HashMap<String,String> data=sessionManagement.getUserDetails();
             email=data.get(SessionManagement.KEY_EMAIL);
             photo=data.get(SessionManagement.KEY_PHOTOURI);
-           /* coin="BTC";
-            market="Bitfinex";*/
+            coin="BTC";
+            getComments(market,coin);
+
         }
     }
     private void getComments(String market,String coin) {
@@ -448,8 +527,8 @@ TextView txt_logout;
                         stringbuilder.append(output);
 
                     }
-                    Log.d("asd",""+output);
-                    Toast.makeText(IndianGraphActivity.this, ""+output, Toast.LENGTH_SHORT).show();
+                    Log.d("asd",""+response.getBody().in());
+                    Toast.makeText(IndianGraphActivity.this, email+"-"+output, Toast.LENGTH_SHORT).show();
                     JSONArray jsonArray=new JSONArray(""+stringbuilder);
                     for (int i=0;i<jsonArray.length();i++){
                         JSONObject jsonObj=jsonArray.getJSONObject(i);
@@ -541,38 +620,40 @@ TextView txt_logout;
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user != null) {
                             // Name, email address, and profile photo Url
-                            name = user.getEmail();
+                            email = user.getEmail();
                             //  String email = user.getEmail();
                             photoUrl = user.getPhotoUrl();
+                            Log.d("asdfs", "" + email + " " + photoUrl);
+                            sessionManagement.createLoginSession(name, String.valueOf(photoUrl));
 
                             // The user's ID, unique to the Firebase project. Do NOT use this value to
                             // authenticate with your backend server, if you have one. Use
                             // FirebaseUser.getToken() instead.
                             String uid = user.getUid();
-                        }
 
-                        if (task.isSuccessful()){
-                            txt_logout.setVisibility(View.VISIBLE);
-                            txt_signin.setVisibility(View.GONE);
-                            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://androidandme.in").build();
-                            ApiInterface myinterface = restAdapter.create(ApiInterface.class);
-                            myinterface.addUser(name, String.valueOf(photoUrl), new retrofit.Callback<retrofit.client.Response>() {
-                                @Override
-                                public void success(retrofit.client.Response response, retrofit.client.Response response2) {
-                                    sessionManagement.createLoginSession(name,String.valueOf(photoUrl));
-                                    mBottomSheetDialog.dismiss();
-                                }
 
-                                @Override
-                                public void failure(RetrofitError error) {
+                            if (task.isSuccessful()) {
+                                txt_logout.setVisibility(View.VISIBLE);
+                                txt_signin.setVisibility(View.GONE);
+                                RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://androidandme.in").build();
+                                ApiInterface myinterface = restAdapter.create(ApiInterface.class);
+                                myinterface.addUser(email, String.valueOf(photoUrl), new retrofit.Callback<retrofit.client.Response>() {
+                                    @Override
+                                    public void success(retrofit.client.Response response, retrofit.client.Response response2) {
+                                        mBottomSheetDialog.dismiss();
+                                    }
 
-                                }
-                            });
+                                    @Override
+                                    public void failure(RetrofitError error) {
+
+                                    }
+                                });
 
                             /*
                             tvname.setText("Welcome "+name);
 */
 
+                            }
                         }else {
                         }
                     }
@@ -646,4 +727,6 @@ TextView txt_logout;
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 }

@@ -1,6 +1,7 @@
 package stock.cryptodoc.ui.fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -38,7 +39,7 @@ public class DashBoardFragment extends Fragment {
     ArrayList<IndianMarket> arrayList;
     ListView listView;
 
-
+ProgressDialog progressDialog;
     Bundle argument;
     IndianMarketAdapter marketListAdapter;
     ArrayList<IndianMarket> arrayList2 = new ArrayList<>();;
@@ -66,10 +67,18 @@ SwipeRefreshLayout swiperefresh;
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dash_board, container, false);
         listView = (ListView) v.findViewById(R.id.marketlist);
-        argument=getArguments();
-        arrayList = argument.getParcelableArrayList("queries");
-        Log.d("ddddddd",""+arrayList);
 
+        argument=getArguments();
+        if (argument!= null) {
+            if (arrayList != null && !arrayList.isEmpty()) {
+
+            } else {
+                arrayList = argument.getParcelableArrayList("queries");
+            }
+        }
+        Log.d("ddddddd",""+arrayList);
+        progressDialog=new ProgressDialog(getActivity());
+        progressDialog.setMessage("PLease Wait");
         swiperefresh=v.findViewById(R.id.swiperefresh);
         if (arrayList!=null && !arrayList.isEmpty()){
             marketListAdapter = new IndianMarketAdapter(arrayList, getActivity());
@@ -77,12 +86,19 @@ SwipeRefreshLayout swiperefresh;
 
         }
         else {
+            progressDialog.show();
 callCoinsecure(url[0]);
         }
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                callCoinsecure(url[0]);
+                if (arrayList2!=null && !arrayList2.isEmpty()){
+                    arrayList2.clear();
+                    callCoinsecure(url[0]);
+                    Log.d("asdad",""+arrayList);
+
+
+                }
             }
         });
 
@@ -107,7 +123,13 @@ callCoinsecure(url[0]);
     @Override
     public void onStart() {
         super.onStart();
-        arrayList = argument.getParcelableArrayList("queries");
+        if (argument!= null) {
+            if (arrayList != null && !arrayList.isEmpty()) {
+
+            } else {
+                arrayList = argument.getParcelableArrayList("queries");
+            }
+        }
 
         if (arrayList!=null && !arrayList.isEmpty()){
             marketListAdapter = new IndianMarketAdapter(arrayList, getActivity());
@@ -115,7 +137,14 @@ callCoinsecure(url[0]);
 
         }
         else {
-            callCoinsecure(url[0]);
+            if (arrayList2!=null && !arrayList2.isEmpty()){
+                arrayList2.clear();
+                callCoinsecure(url[0]);
+                Log.d("asdad",""+arrayList);
+
+
+            }
+
         }
     }
 
@@ -176,7 +205,9 @@ callCoinsecure(url[0]);
 
     public void callCoinsecure(final String s) {
 
-
+if (swiperefresh.isRefreshing()){
+    swiperefresh.setRefreshing(false);
+}
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(s).build();
         ApiInterface myinterface = restAdapter.create(ApiInterface.class);
         myinterface.getCoinsecureApi(new Callback<Response>() {
@@ -428,10 +459,13 @@ callCoinsecure(url[0]);
                     if (arrayList!=null && arrayList.isEmpty())
                     {
                         arrayList.clear();
+                        progressDialog.dismiss();;
+
                         marketListAdapter = new IndianMarketAdapter(arrayList2, getActivity());
                         listView.setAdapter(marketListAdapter);
                     }
                     else {
+                        progressDialog.dismiss();;
                         marketListAdapter = new IndianMarketAdapter(arrayList2, getActivity());
                         listView.setAdapter(marketListAdapter);
                     }
@@ -448,6 +482,8 @@ callCoinsecure(url[0]);
             public void failure(RetrofitError error) {
                 if (arrayList.size() > 0)
                 {
+                    progressDialog.dismiss();;
+
                     arrayList.clear();
                     marketListAdapter = new IndianMarketAdapter(arrayList2, getActivity());
                     listView.setAdapter(marketListAdapter);

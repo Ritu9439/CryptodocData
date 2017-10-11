@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        local = new IndianMarket();
+
         txtprogress= (TextView) findViewById(R.id.txtprogress);
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -306,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                                 if (localbitcoins.equalsIgnoreCase("LocalBitcoins")) {
                                     String localprice = object.getString("PRICE");
 
-                                    local = new IndianMarket();
+
                                     local.setBuy(localprice);
                                     local.setCoin("BTC");
                                     local.setMarket("LocalBitcoins");
@@ -356,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                     JSONObject jobj=jsonArray.getJSONObject(2);
                     JSONObject dataobj=jobj.getJSONObject("data");
                     String temp_price=dataobj.getString("temp_price");
-                    local=new IndianMarket();
+
                     txtprogress.setText("95%");
                     local.setBuy(temp_price);
                     local.setCoin("BTC");

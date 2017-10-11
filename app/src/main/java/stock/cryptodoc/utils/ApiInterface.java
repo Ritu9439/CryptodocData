@@ -74,6 +74,8 @@ public interface ApiInterface {
 
     @retrofit2.http.GET("/data/histominute")
     Call<Example> getChart(@retrofit2.http.Query("fsym") String fsym, @retrofit2.http.Query("tsym") String tsym, @retrofit2.http.Query("limit") String limit, @retrofit2.http.Query("e") String e);
+    @retrofit2.http.GET("/data/histominute?fsym=BTC&tsym=INR&limit=60&eETHexIndia")
+    Call<Example> getChartsETH();
 //Comments
 
     //add user
