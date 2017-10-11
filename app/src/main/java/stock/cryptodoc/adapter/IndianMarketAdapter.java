@@ -86,6 +86,8 @@ view.setOnClickListener(new View.OnClickListener() {
         IndianMarket marketData=marketDatas.get(i);
         Intent intent=new Intent(context, IndianGraphActivity.class);
         intent.putExtra("market",marketData.getMarket());
+
+
         context.startActivity(intent);
         Toast.makeText(context, ""+marketData.getMarket(), Toast.LENGTH_SHORT).show();
 

@@ -7,6 +7,9 @@ import android.net.Uri;
 
 import java.util.HashMap;
 
+import stock.cryptodoc.ui.activity.DetailedActivity;
+import stock.cryptodoc.ui.activity.GraphActivity;
+import stock.cryptodoc.ui.activity.HomeActivity;
 import stock.cryptodoc.ui.activity.LoginActivity;
 
 /**
@@ -112,7 +115,7 @@ public class SessionManagement {
         editor.commit();
 
         // After logout redirect user to Loing Activity
-        Intent i = new Intent(_context, LoginActivity.class);
+        Intent i = new Intent(_context, HomeActivity.class);
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

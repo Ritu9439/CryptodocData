@@ -1,15 +1,19 @@
 package stock.cryptodoc.ui.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +34,21 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,12 +79,16 @@ import stock.cryptodoc.model.Example;
 import stock.cryptodoc.utils.ApiClient;
 import stock.cryptodoc.utils.ApiInterface;
 
-public class GraphActivity extends AppCompatActivity implements OnChartValueSelectedListener {
+public class GraphActivity extends AppCompatActivity implements OnChartValueSelectedListener,GoogleApiClient.OnConnectionFailedListener {
     CandleStickChart web;
     Toolbar toolbar;
     String coin,coinprice,market;
 RecyclerView postdatalist;
 RadioButton timeseries_hour;
+    Dialog mBottomSheetDialog;
+    TextView txt_logout;
+    String name;
+    SignInButton txt_signin;
     RadioGroup timeseries;
     private FirebaseAuth mAuth;
     ArrayList<Comments> arraylistcomments=new ArrayList<>();
@@ -79,6 +99,7 @@ RadioButton timeseries_hour;
 TextView cointv,coinpricetv,open,high,low,close,date;
     private GoogleApiClient mGoogleApiClient;
     private int RC_SIGN_IN=1;
+    private int RC_SIGN_INN=9001;
     private SignInButton signInButton;
 FloatingActionButton addNewPostFab;
     SessionManagement sessionManagement;
@@ -86,9 +107,7 @@ FloatingActionButton addNewPostFab;
     String email="",photo="";
     EditText commentEditText;
     Button sendButton;
-
-
-
+    private Uri photoUrl;
 
 
     @Override
@@ -99,6 +118,17 @@ FloatingActionButton addNewPostFab;
         setSupportActionBar(toolbar);
         sessionManagement=new SessionManagement(GraphActivity.this);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(GraphActivity.this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        mAuth = FirebaseAuth.getInstance();
 
         web= (CandleStickChart) findViewById(R.id.web);
         timeseries= (RadioGroup) findViewById(R.id.timeseries);
@@ -166,12 +196,41 @@ FloatingActionButton addNewPostFab;
                 if (sessionManagement.isLoggedIn()) {
                     newCommentContainer.setVisibility(View.VISIBLE);
                 }else {
-                    Intent intent = new Intent(GraphActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    /*Intent intent = new Intent(GraphActivity.this, LoginActivity.class);
+                    startActivity(intent);*/
+
+
+                    View v = getLayoutInflater ().inflate (R.layout.bottom_sheet, null);
+                     mBottomSheetDialog = new Dialog (GraphActivity.this, R.style.MaterialDialogSheet);
+                    mBottomSheetDialog.setContentView (v);
+                     txt_logout = (TextView)v.findViewById( R.id.txt_logout);
+                     txt_signin = (SignInButton) v.findViewById( R.id.txt_signin);
+
+
+                    mBottomSheetDialog.setCancelable (true);
+                    mBottomSheetDialog.getWindow ().setLayout (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    mBottomSheetDialog.getWindow ().setGravity (Gravity.BOTTOM);
+                    mBottomSheetDialog.show ();
+
+                    txt_logout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            signOut();
+                        }
+                    });
+
+                    txt_signin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            signIn();
+
+                        }
+                    });
+
                 }
             }
         });
-        Toast.makeText(this, ""+coin, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "h"+coin, Toast.LENGTH_SHORT).show();
         web.setOnChartValueSelectedListener(this);
         if(market != null && !market.isEmpty()) {
             if (market.equalsIgnoreCase("Bitfinex")) {
@@ -1009,6 +1068,30 @@ FloatingActionButton addNewPostFab;
 
     }
 
+    private void signOut() {
+
+            // Firebase sign out
+            mAuth.signOut();
+
+
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+
+                            sessionManagement.logoutUser();
+                            Toast.makeText(GraphActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+           // txt_logout.setVisibility(View.GONE);
+/*
+        tvname.setText(null);
+*/
+           // txt_signin.setVisibility(View.VISIBLE);
+
+    }
+
     private void getComments(String market,String coin) {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://androidandme.in").build();
         ApiInterface myinterface = restAdapter.create(ApiInterface.class);
@@ -1025,7 +1108,7 @@ FloatingActionButton addNewPostFab;
 
                     }
                     Log.d("asd",""+output);
-                    Toast.makeText(GraphActivity.this, ""+output, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GraphActivity.this, "output"+output, Toast.LENGTH_SHORT).show();
                     JSONArray jsonArray=new JSONArray(""+stringbuilder);
                     for (int i=0;i<jsonArray.length();i++){
                         JSONObject jsonObj=jsonArray.getJSONObject(i);
@@ -1055,7 +1138,7 @@ FloatingActionButton addNewPostFab;
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, RC_SIGN_INN);
     }
 
     @Override
@@ -1065,6 +1148,8 @@ FloatingActionButton addNewPostFab;
             HashMap<String,String> data=sessionManagement.getUserDetails();
             email=data.get(SessionManagement.KEY_EMAIL);
             photo=data.get(SessionManagement.KEY_PHOTOURI);
+           /* coin="BTC";
+            market="Bitfinex";*/
         }
     }
 
@@ -1125,14 +1210,12 @@ FloatingActionButton addNewPostFab;
         switch (id){
             case R.id.action_user:
                 if (sessionManagement.isLoggedIn()) {
-                    Toast.makeText(this, "User Logged in", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(GraphActivity.this,LoginActivity.class);
-                    startActivity(intent);
+
+
+                            signOut();
+
                 }
-                else {
-                    Intent intent=new Intent(GraphActivity.this,LoginActivity.class);
-                    startActivity(intent);
-                }
+
                 break;
 
         }
@@ -1240,6 +1323,82 @@ FloatingActionButton addNewPostFab;
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==RC_SIGN_INN){
+
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()){
+
+                GoogleSignInAccount account = result.getSignInAccount();
+
+                firebaseAuthWithGoogle(account);
+            }
+
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d("TAG", "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        Toast.makeText(GraphActivity.this,""+credential.getProvider(),Toast.LENGTH_LONG).show();
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        Log.d("TAG", "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null) {
+                            // Name, email address, and profile photo Url
+                            name = user.getEmail();
+                            //  String email = user.getEmail();
+                            photoUrl = user.getPhotoUrl();
+
+                            // The user's ID, unique to the Firebase project. Do NOT use this value to
+                            // authenticate with your backend server, if you have one. Use
+                            // FirebaseUser.getToken() instead.
+                            String uid = user.getUid();
+                        }
+
+                        if (task.isSuccessful()){
+                            txt_logout.setVisibility(View.VISIBLE);
+                            txt_signin.setVisibility(View.GONE);
+                            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://androidandme.in").build();
+                            ApiInterface myinterface = restAdapter.create(ApiInterface.class);
+                            myinterface.addUser(name, String.valueOf(photoUrl), new retrofit.Callback<retrofit.client.Response>() {
+                                        @Override
+                                        public void success(retrofit.client.Response response, retrofit.client.Response response2) {
+                                            sessionManagement.createLoginSession(name,String.valueOf(photoUrl));
+                                            mBottomSheetDialog.dismiss();
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+
+                                        }
+                                    });
+
+                            /*
+                            tvname.setText("Welcome "+name);
+*/
+
+                        }else {
+                        }
+                    }
+                });
     }
     ////////////////////Bitstamp
 

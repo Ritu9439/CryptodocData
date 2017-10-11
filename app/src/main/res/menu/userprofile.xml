@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_user"
         android:orderInCategory="100"
-        android:title="User Profile"
+        android:title="Logout"
 
         app:showAsAction="never" />
 

@@ -63,10 +63,11 @@ public class ForeignMarketAdapter extends RecyclerView.Adapter<ForeignMarketAdap
         ForeignMarket foreignMarket=arrayList.get(position);
         holder.name.setText(foreignMarket.getLASTMARKET());
         holder.price.setText(foreignMarket.getPRICE());
-            Glide.with(context).load(foreignMarket.getIMAGE()).error(R.mipmap.ic_launcher).placeholder(R.mipmap.ic_launcher).into(holder.coinimage);
+            Glide.with(context).load(foreignMarket.getIMAGE()).error(R.mipmap.ic_launcher).into(holder.coinimage);
 
 
 
+Log.d("sdfsdfw",foreignMarket.getIMAGE());
 
 
 

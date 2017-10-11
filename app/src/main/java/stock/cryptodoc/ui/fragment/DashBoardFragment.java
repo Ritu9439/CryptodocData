@@ -9,9 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,8 +37,11 @@ import static android.os.Looper.getMainLooper;
 public class DashBoardFragment extends Fragment {
     ArrayList<IndianMarket> arrayList;
     ListView listView;
+
+
+    Bundle argument;
     IndianMarketAdapter marketListAdapter;
-    ArrayList<IndianMarket> arrayList2 ;
+    ArrayList<IndianMarket> arrayList2 = new ArrayList<>();;
     String url[] = {"https://api.coinsecure.in", "https://www.unocoin.com", "https://www.zebapi.com", "https://ethexindia.com/", "https://api.bitxoxo.com/", "https://localbitcoins.com/"};
     StringBuilder stringbuilder = new StringBuilder();
     StringBuilder stringbuilder2 = new StringBuilder();
@@ -65,10 +66,19 @@ SwipeRefreshLayout swiperefresh;
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dash_board, container, false);
         listView = (ListView) v.findViewById(R.id.marketlist);
-        arrayList = getActivity().getIntent().getParcelableArrayListExtra("queries");
+        argument=getArguments();
+        arrayList = argument.getParcelableArrayList("queries");
+        Log.d("ddddddd",""+arrayList);
+
         swiperefresh=v.findViewById(R.id.swiperefresh);
-        marketListAdapter = new IndianMarketAdapter(arrayList, getActivity());
-        listView.setAdapter(marketListAdapter);
+        if (arrayList!=null && !arrayList.isEmpty()){
+            marketListAdapter = new IndianMarketAdapter(arrayList, getActivity());
+            listView.setAdapter(marketListAdapter);
+
+        }
+        else {
+callCoinsecure(url[0]);
+        }
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -81,13 +91,32 @@ SwipeRefreshLayout swiperefresh;
         someHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                callCoinsecure(url[0]);
-                Log.d("asdad",""+arrayList);
-               arrayList2 = new ArrayList<>();
-                someHandler.postDelayed(this, 20000);
+                if (arrayList2!=null && !arrayList2.isEmpty()){
+                    arrayList2.clear();
+                    callCoinsecure(url[0]);
+                    Log.d("asdad",""+arrayList);
+                    someHandler.postDelayed(this, 20000);
+
+                }
+
             }
         }, 10);
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        arrayList = argument.getParcelableArrayList("queries");
+
+        if (arrayList!=null && !arrayList.isEmpty()){
+            marketListAdapter = new IndianMarketAdapter(arrayList, getActivity());
+            listView.setAdapter(marketListAdapter);
+
+        }
+        else {
+            callCoinsecure(url[0]);
+        }
     }
 
     public void callData(){
@@ -183,7 +212,7 @@ SwipeRefreshLayout swiperefresh;
 
             @Override
             public void failure(RetrofitError error) {
-
+                callZebapi(url[2]);
             }
         });
     }
@@ -220,7 +249,7 @@ SwipeRefreshLayout swiperefresh;
 
             @Override
             public void failure(RetrofitError error) {
-
+                getEthexIndia(url[3]);
             }
         });
     }
@@ -254,7 +283,7 @@ SwipeRefreshLayout swiperefresh;
 
             @Override
             public void failure(RetrofitError error) {
-
+                getBitxoxoIndia(url[4]);
             }
         });
     }
@@ -289,7 +318,7 @@ SwipeRefreshLayout swiperefresh;
 
             @Override
             public void failure(RetrofitError error) {
-
+                callUnocoin(url[1]);
             }
         });
     }
@@ -327,7 +356,7 @@ SwipeRefreshLayout swiperefresh;
 
             @Override
             public void failure(RetrofitError error) {
-
+                callData();
             }
         });
     }
@@ -367,6 +396,7 @@ SwipeRefreshLayout swiperefresh;
 
             @Override
             public void failure(RetrofitError error) {
+                getLocalbitCoinssell();
 
             }
         });
@@ -394,9 +424,14 @@ SwipeRefreshLayout swiperefresh;
 
                     local.setSell(temp_price);
                     arrayList2.add(local);
-                    if (arrayList.size() > 0)
+
+                    if (arrayList!=null && arrayList.isEmpty())
                     {
                         arrayList.clear();
+                        marketListAdapter = new IndianMarketAdapter(arrayList2, getActivity());
+                        listView.setAdapter(marketListAdapter);
+                    }
+                    else {
                         marketListAdapter = new IndianMarketAdapter(arrayList2, getActivity());
                         listView.setAdapter(marketListAdapter);
                     }
@@ -411,7 +446,12 @@ SwipeRefreshLayout swiperefresh;
 
             @Override
             public void failure(RetrofitError error) {
-
+                if (arrayList.size() > 0)
+                {
+                    arrayList.clear();
+                    marketListAdapter = new IndianMarketAdapter(arrayList2, getActivity());
+                    listView.setAdapter(marketListAdapter);
+                }
             }
         });
 

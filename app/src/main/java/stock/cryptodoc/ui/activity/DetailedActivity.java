@@ -107,7 +107,7 @@ getBTCE();
 
                     ForeignMarket foreignmarket = new ForeignMarket("BTC", "$ " + btcusd, "", "");
                     foreignmarket.setMARKETNAME("BitTrex");
-                    foreignmarket.setIMAGE(""+al2.get(0));
+                    foreignmarket.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
 
 
                     al.add(foreignmarket);
@@ -117,28 +117,28 @@ getBTCE();
                     ForeignMarket foreignmarket1 = new ForeignMarket("ETH", "$ " + btcusd1, "", "");
                     foreignmarket1.setMARKETNAME("BitTrex");
 
-                    foreignmarket1.setIMAGE(""+al2.get(1));
+                    foreignmarket1.setIMAGE("http://androidandme.in/cryptoimg/eth.png");
 
                     al.add(foreignmarket1);
                     JSONObject jobj2 = jobject.getJSONObject("LTC");
                     String btcusd2 = jobj2.getString("USD");
                     ForeignMarket foreignmarket2 = new ForeignMarket("LTC", "$ " + btcusd2, "", "");
                     foreignmarket2.setMARKETNAME("BitTrex");
-                    foreignmarket2.setIMAGE(""+al2.get(2));
+                    foreignmarket2.setIMAGE("http://androidandme.in/cryptoimg/ltc.png");
 
                     al.add(foreignmarket2);
                     JSONObject jobj3 = jobject.getJSONObject("XRP");
                     String btcusd3 = jobj3.getString("USD");
                     ForeignMarket foreignmarket3 = new ForeignMarket("XRP", "$ " + btcusd3, "", "");
                     foreignmarket3.setMARKETNAME("BitTrex");
-                    foreignmarket3.setIMAGE(""+al2.get(3));
+                    foreignmarket3.setIMAGE("http://androidandme.in/cryptoimg/xrp.png");
 
                     al.add(foreignmarket3);
                     JSONObject jobj4 = jobject.getJSONObject("BCH");
                     String btcusd4 = jobj4.getString("USD");
                     ForeignMarket foreignmarket4 = new ForeignMarket("BCH", "$ " + btcusd4, "", "");
                     foreignmarket4.setMARKETNAME("BitTrex");
-                    foreignmarket4.setIMAGE(""+al2.get(4));
+                    foreignmarket4.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
 
                     al.add(foreignmarket4);
 
@@ -187,35 +187,35 @@ getBTCE();
 
                     ForeignMarket foreignmarket = new ForeignMarket("BTC", "$ " + btcusd, "", "");
                     foreignmarket.setMARKETNAME("Kraken");
-                    foreignmarket.setIMAGE(""+al2.get(0));
+                    foreignmarket.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
                     al.add(foreignmarket);
 
                     JSONObject jobj1 = jobject.getJSONObject("ETH");
                     String btcusd1 = jobj1.getString("USD");
                     ForeignMarket foreignmarket1 = new ForeignMarket("ETH", "$ " + btcusd1, "", "");
                     foreignmarket1.setMARKETNAME("Kraken");
-                    foreignmarket1.setIMAGE(""+al2.get(1));
+                    foreignmarket1.setIMAGE("http://androidandme.in/cryptoimg/eth.png");
 
                     al.add(foreignmarket1);
                     JSONObject jobj2 = jobject.getJSONObject("LTC");
                     String btcusd2 = jobj2.getString("USD");
                     ForeignMarket foreignmarket2 = new ForeignMarket("LTC", "$ " + btcusd2, "", "");
                     foreignmarket2.setMARKETNAME("Kraken");
-                    foreignmarket2.setIMAGE(""+al2.get(2));
+                    foreignmarket2.setIMAGE("http://androidandme.in/cryptoimg/ltc.png");
 
                     al.add(foreignmarket2);
                     JSONObject jobj3 = jobject.getJSONObject("XRP");
                     String btcusd3 = jobj3.getString("USD");
                     ForeignMarket foreignmarket3 = new ForeignMarket("XRP", "$ " + btcusd3, "", "");
                     foreignmarket3.setMARKETNAME("Kraken");
-                    foreignmarket3.setIMAGE(""+al2.get(3));
+                    foreignmarket3.setIMAGE("http://androidandme.in/cryptoimg/xrp.png");
 
                     al.add(foreignmarket3);
                     JSONObject jobj4 = jobject.getJSONObject("BCH");
                     String btcusd4 = jobj4.getString("USD");
                     ForeignMarket foreignmarket4 = new ForeignMarket("BCH", "$ " + btcusd4, "", "");
                     foreignmarket4.setMARKETNAME("Kraken");
-                    foreignmarket4.setIMAGE(""+al2.get(4));
+                    foreignmarket4.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
 
                     al.add(foreignmarket4);
 
@@ -259,7 +259,7 @@ getBTCE();
 
                     ForeignMarket foreignmarket = new ForeignMarket("BTC", "$ " + btcusd, "", "");
                     foreignmarket.setMARKETNAME("Bitfinex");
-                    foreignmarket.setIMAGE(""+al2.get(0));
+                    foreignmarket.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
 
                     al.add(foreignmarket);
 
@@ -267,20 +267,20 @@ getBTCE();
                     String btcusd1 = jobj1.getString("USD");
                     ForeignMarket foreignmarket1 = new ForeignMarket("ETH", "$ " + btcusd1, "", "");
                     foreignmarket1.setMARKETNAME("Bitfinex");
-                    foreignmarket1.setIMAGE(""+al2.get(1));
+                    foreignmarket1.setIMAGE("http://androidandme.in/cryptoimg/eth.png");
 
                     al.add(foreignmarket1);
                     JSONObject jobj2 = jobject.getJSONObject("LTC");
                     String btcusd2 = jobj2.getString("USD");
                     ForeignMarket foreignmarket2 = new ForeignMarket("LTC", "$ " + btcusd2, "", "");
-                    foreignmarket2.setIMAGE(""+al2.get(2));
+                    foreignmarket2.setIMAGE("http://androidandme.in/cryptoimg/ltc.png");
 
                     foreignmarket2.setMARKETNAME("Bitfinex");
                     al.add(foreignmarket2);
                     JSONObject jobj3 = jobject.getJSONObject("XRP");
                     String btcusd3 = jobj3.getString("USD");
                     ForeignMarket foreignmarket3 = new ForeignMarket("XRP", "$ " + btcusd3, "", "");
-                    foreignmarket3.setIMAGE(""+al2.get(3));
+                    foreignmarket3.setIMAGE("http://androidandme.in/cryptoimg/xrp.png");
 
                     foreignmarket3.setMARKETNAME("Bitfinex");
                     al.add(foreignmarket3);
@@ -288,7 +288,7 @@ getBTCE();
                     String btcusd4 = jobj4.getString("USD");
                     ForeignMarket foreignmarket4 = new ForeignMarket("BCH", "$ " + btcusd4, "", "");
                     foreignmarket4.setMARKETNAME("Bitfinex");
-                    foreignmarket4.setIMAGE(""+al2.get(4));
+                    foreignmarket4.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
 
                     al.add(foreignmarket4);
 
@@ -332,7 +332,7 @@ getBTCE();
                     Toast.makeText(DetailedActivity.this, "" + btcusd, Toast.LENGTH_SHORT).show();
 
                     ForeignMarket foreignmarket = new ForeignMarket("BTC", "$ " + btcusd, "", "");
-                    foreignmarket.setIMAGE(""+al2.get(0));
+                    foreignmarket.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
                     foreignmarket.setMARKETNAME("BTCE");
                     al.add(foreignmarket);
 
@@ -340,7 +340,7 @@ getBTCE();
                     String btcusd1 = jobj1.getString("USD");
                     ForeignMarket foreignmarket1 = new ForeignMarket("ETH", "$ " + btcusd1, "", "");
                     foreignmarket1.setMARKETNAME("BTCE");
-                    foreignmarket1.setIMAGE(""+al2.get(1));
+                    foreignmarket1.setIMAGE("http://androidandme.in/cryptoimg/eth.png");
 
 
                     al.add(foreignmarket1);
@@ -348,7 +348,7 @@ getBTCE();
                     String btcusd2 = jobj2.getString("USD");
                     ForeignMarket foreignmarket2 = new ForeignMarket("LTC", "$ " + btcusd2, "", "");
                     foreignmarket2.setMARKETNAME("BTCE");
-                    foreignmarket2.setIMAGE(""+al2.get(2));
+                    foreignmarket2.setIMAGE("http://androidandme.in/cryptoimg/ltc.png");
 
                     al.add(foreignmarket2);
 
@@ -395,7 +395,7 @@ getBTCE();
 
                     ForeignMarket foreignmarket = new ForeignMarket("BTC", "$ " + btcusd, "", "");
                     foreignmarket.setMARKETNAME("Poloniex");
-                    foreignmarket.setIMAGE(""+al2.get(0));
+                    foreignmarket.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
 
                     al.add(foreignmarket);
 
@@ -403,28 +403,28 @@ getBTCE();
                     String btcusd1 = jobj1.getString("USD");
                     ForeignMarket foreignmarket1 = new ForeignMarket("ETH", "$ " + btcusd1, "", "");
                     foreignmarket1.setMARKETNAME("Poloniex");
-                    foreignmarket1.setIMAGE(""+al2.get(1));
+                    foreignmarket1.setIMAGE("http://androidandme.in/cryptoimg/eth.png");
 
                     al.add(foreignmarket1);
                     JSONObject jobj2 = jobject.getJSONObject("LTC");
                     String btcusd2 = jobj2.getString("USD");
                     ForeignMarket foreignmarket2 = new ForeignMarket("LTC", "$ " + btcusd2, "", "");
                     foreignmarket2.setMARKETNAME("Poloniex");
-                    foreignmarket2.setIMAGE(""+al2.get(2));
+                    foreignmarket2.setIMAGE("http://androidandme.in/cryptoimg/ltc.png");
 
                     al.add(foreignmarket2);
                     JSONObject jobj3 = jobject.getJSONObject("XRP");
                     String btcusd3 = jobj3.getString("USD");
                     ForeignMarket foreignmarket3 = new ForeignMarket("XRP", "$ " + btcusd3, "", "");
                     foreignmarket3.setMARKETNAME("Poloniex");
-                    foreignmarket3.setIMAGE(""+al2.get(3));
+                    foreignmarket3.setIMAGE("http://androidandme.in/cryptoimg/xrp.png");
 
                     al.add(foreignmarket3);
                     JSONObject jobj4 = jobject.getJSONObject("BCH");
                     String btcusd4 = jobj4.getString("USD");
                     ForeignMarket foreignmarket4 = new ForeignMarket("BCH", "$ " + btcusd4, "", "");
                     foreignmarket4.setMARKETNAME("Poloniex");
-                    foreignmarket4.setIMAGE(""+al2.get(4));
+                    foreignmarket4.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
 
                     al.add(foreignmarket4);
 
@@ -469,7 +469,7 @@ getBTCE();
                     Toast.makeText(DetailedActivity.this, "" + btcusd, Toast.LENGTH_SHORT).show();
 
                     ForeignMarket foreignmarket = new ForeignMarket("BTC", "$ " + btcusd, "", "");
-                    foreignmarket.setIMAGE(""+al2.get(0));
+                    foreignmarket.setIMAGE("http://androidandme.in/cryptoimg/btc.png");
                     foreignmarket.setMARKETNAME("Bitstamp");
 
                     al.add(foreignmarket);
@@ -478,14 +478,14 @@ getBTCE();
                     String btcusd2 = jobj2.getString("USD");
                     ForeignMarket foreignmarket2 = new ForeignMarket("LTC", "$ " + btcusd2, "", "");
                     foreignmarket2.setMARKETNAME("Bitstamp");
-                    foreignmarket2.setIMAGE(""+al2.get(2));
+                    foreignmarket2.setIMAGE("http://androidandme.in/cryptoimg/ltc.png");
 
                     al.add(foreignmarket2);
                     JSONObject jobj3 = jobject.getJSONObject("XRP");
                     String btcusd3 = jobj3.getString("USD");
                     ForeignMarket foreignmarket3 = new ForeignMarket("XRP", "$ " + btcusd3, "", "");
                     foreignmarket3.setMARKETNAME("Bitstamp");
-                    foreignmarket3.setIMAGE(""+al2.get(3));
+                    foreignmarket3.setIMAGE("http://androidandme.in/cryptoimg/xrp.png");
 
                     al.add(foreignmarket3);
 

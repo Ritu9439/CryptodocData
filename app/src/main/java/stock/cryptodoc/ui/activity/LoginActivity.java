@@ -169,6 +169,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     sessionManagement.createLoginSession(name,String.valueOf(photoUrl));
                                     Intent intent = new Intent(LoginActivity.this,GraphActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 }
 
                                 @Override

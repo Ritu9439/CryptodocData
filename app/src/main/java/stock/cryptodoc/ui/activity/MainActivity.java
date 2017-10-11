@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         realtive.setVisibility(View.VISIBLE);
         realtive.startAnimation(animFadeIn);
         txtprogress.setText("1%");
-        callCoinsecure(url[0]);
+
 
         int[] color = {Color.DKGRAY, Color.CYAN};
 
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
             @Override
             public void failure(RetrofitError error) {
-
+                getEthexIndia(url[3]);
             }
         });
     } private void getEthexIndia(final String s){
@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
             @Override
             public void failure(RetrofitError error) {
-
+                callData();
             }
         });
     }
@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
             @Override
             public void failure(RetrofitError error) {
-
+                getLocalbitCoinssell();
             }
         });
     }
@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
             @Override
             public void failure(RetrofitError error) {
-
+                getLocalbitCoinssell();
             }
         });
     }
@@ -416,8 +416,20 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
             @Override
             public void failure(RetrofitError error) {
-
+                Intent intent=new Intent(MainActivity.this,HomeActivity.class);
+                intent.putParcelableArrayListExtra("queries", arrayList);
+                startActivity(intent);
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (arrayList.isEmpty()){
+            callCoinsecure(url[0]);
+        }
+
     }
 }
